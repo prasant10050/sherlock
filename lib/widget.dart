@@ -21,11 +21,25 @@ class SherlockSearchBar extends StatefulWidget {
   final int? sherlockCompletionMinResults;
   final int? sherlockCompletionMaxResults;
   final void Function(String input, Sherlock sherlock)? onSearch;
+  final Iterable<Widget>? barTrailing;
+  final Widget? barLeading;
+  final GestureTapCallback? onTap;
+  final BoxConstraints? constraints;
+  final BoxConstraints? viewConstraints;
+  final Color? viewBackgroundColor;
+  final double? viewElevation;
+  final TextStyle? viewHeaderTextStyle;
+  final TextStyle? viewHeaderHintStyle;
+  final String? viewHintText;
+  final Widget? viewLeading;
+  final Iterable<Widget>? viewTrailing;
+  final BorderSide? viewSide;
+  final OutlinedBorder? viewShape;
 
   final SherlockCompletionsBuilder Function(
-    BuildContext context,
-    List<String> completions,
-  )? completionsBuilder;
+      BuildContext context,
+      List<String> completions,
+      )? completionsBuilder;
 
   const SherlockSearchBar({
     super.key,
@@ -46,6 +60,17 @@ class SherlockSearchBar extends StatefulWidget {
     this.sherlockCompletionMaxResults,
     this.onSearch,
     this.completionsBuilder,
+    this.barTrailing,
+    this.barLeading,
+    this.onTap,
+    this.constraints,
+    this.viewBackgroundColor,
+    this.viewConstraints,
+    this.viewElevation,
+    this.viewHeaderHintStyle,
+    this.viewHeaderTextStyle,
+    this.viewHintText,
+    this.viewLeading, this.viewTrailing, this.viewShape, this.viewSide,
   });
 
   @override
@@ -82,6 +107,20 @@ class _SherlockSearchBarState extends State<SherlockSearchBar> {
       barTextStyle: MaterialStatePropertyAll(widget.textStyle),
       barHintStyle: MaterialStatePropertyAll(widget.hintStyle),
       searchController: _controller,
+      barLeading: widget.barLeading,
+      constraints: widget.constraints,
+      barTrailing: widget.barTrailing,
+      viewBackgroundColor: widget.viewBackgroundColor,
+      viewConstraints: widget.viewConstraints,
+      viewElevation: widget.viewElevation,
+      onTap: widget.onTap,
+      viewHeaderHintStyle: widget.viewHeaderHintStyle,
+      viewHeaderTextStyle: widget.viewHeaderTextStyle,
+      viewHintText: widget.viewHintText,
+      viewLeading: widget.viewLeading,
+      viewShape: widget.viewShape,
+      viewSide: widget.viewSide,
+      viewTrailing: widget.viewTrailing,
       suggestionsBuilder: (context, controller) {
         // Text inside the input field of the search bar.
         final input = controller.text;
@@ -99,12 +138,13 @@ class _SherlockSearchBarState extends State<SherlockSearchBar> {
             final SherlockCompletionsBuilder builder = (widget.completionsBuilder != null)
                 ? widget.completionsBuilder!(context, completions)
                 : SherlockCompletionsBuilder(
-                    completions: completions,
-                    buildCompletion: (suggestion) => Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text(suggestion),
-                    ),
-                  );
+              completions: completions,
+              buildCompletion: (suggestion) =>
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(suggestion),
+                  ),
+            );
 
             _completionWidgets = builder.build();
           });
